@@ -2,6 +2,7 @@ package cn.itcast;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,9 +11,10 @@ import org.springframework.web.client.RestTemplate;
  * @description：TODO
  * @date ：2021/2/8 01:17
  */
+
+@EnableEurekaClient
 @SpringBootApplication
 public class ConsumerApplication {
-
     //注册一个restTemplate
     @Bean
     public RestTemplate restTemplate() {

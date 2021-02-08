@@ -1,9 +1,15 @@
 server:
   port: 8081
 spring:
+  application:
+    name: user-service
   datasource:
     url: jdbc:mysql://localhost:3306/mydb01
     username: root
     password: rrrr
 mybatis:
   type-aliases-package: cn.itcast.user.pojo
+eureka:
+  client:
+    server-url:
+      defaultZone: http://127.0.0.1:10086/eureka
