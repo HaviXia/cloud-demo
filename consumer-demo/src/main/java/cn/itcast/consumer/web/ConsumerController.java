@@ -44,9 +44,8 @@ public class ConsumerController {
         // 根据服务id获取实例
         List<ServiceInstance> instances = discoveryClient.getInstances("user-service");//参数是服务id
         //从实例中取出ip和端口
-        ServiceInstance serviceInstance = instances.get(0);//0号
+        ServiceInstance serviceInstance = instances.get(0);//0号,将来需要负载均衡算法，随机选Instances
         //取出端口
-        ;
         String url = "http://" + serviceInstance.getHost() + ":" + serviceInstance.getPort() + "/user/" + id;
 
         User user = restTemplatere.getForObject(url, User.class);
