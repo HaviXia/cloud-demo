@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/mydb01
     username: root
-    password: rrrr
+    password: WrongPwdLOL
 mybatis:
   type-aliases-package: cn.itcast.user.pojo
 eureka:
