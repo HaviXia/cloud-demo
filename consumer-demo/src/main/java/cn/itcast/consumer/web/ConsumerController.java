@@ -1,9 +1,9 @@
 package cn.itcast.consumer.web;
 
-import cn.itcast.consumer.pojo.User;
 
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * @author ：hkxia
@@ -39,7 +37,9 @@ public class ConsumerController {
     @GetMapping("{id}")
     // 开启线程隔离、服务容错注解
     //@HystrixCommand(fallbackMethod = "queryByIdFallBack") //成功和失败的方法，两个方法的返回值、参数列表必须一致
-    @HystrixCommand
+    /*@HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+    })*/
     public String queryById(@PathVariable("id") Long id) {
         /*
          * eureka中已经注册了user-service，动态获取
@@ -66,6 +66,10 @@ public class ConsumerController {
     }
 
     public String queryByIdFallBack(@PathVariable("id") Long id) {
+        return "抱歉，服务器拥挤，请稍后再试！";
+    }
+
+    public String defaultFallBack() {
         return "抱歉，服务器拥挤，请稍后再试！";
     }
 }
