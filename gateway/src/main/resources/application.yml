@@ -10,5 +10,7 @@ spring:
 zuul:
   routes:
     user-service: /user/**
+  strip-prefix: false
   ignored-services:
     - consumer-service
+  prefix: /api #全局的前缀，使用全局strip-prefix
