@@ -37,9 +37,12 @@ public class ConsumerController {
     @GetMapping("{id}")
     // 开启线程隔离、服务容错注解
     //@HystrixCommand(fallbackMethod = "queryByIdFallBack") //成功和失败的方法，两个方法的返回值、参数列表必须一致
-    /*@HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
-    })*/
+    @HystrixCommand(commandProperties = {
+            // @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"), //失败次数
+            @HystrixProperty(name = "circuitBreaker.sleepWiondowInMilliseconds", value = "10000"),//休眠时间窗次数
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60") //错误百分比
+    })
     public String queryById(@PathVariable("id") Long id) {
         /*
          * eureka中已经注册了user-service，动态获取
@@ -60,6 +63,9 @@ public class ConsumerController {
          * */
         //ServiceInstance choose = ribbonLoadBalancerClient.choose("user-service"); //得到一个实例，默认轮询
 
+        if (id % 2 == 0) {
+            throw new RuntimeException("手动控制熔断");
+        }
         String url = "http://user-service/user/" + id;
         String user = restTemplatere.getForObject(url, String.class);
         return user;
