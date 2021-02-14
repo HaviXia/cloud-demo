@@ -1,9 +1,8 @@
 package cn.itcast;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,8 +12,13 @@ import org.springframework.web.client.RestTemplate;
  * @date ：2021/2/8 01:17
  */
 
-@EnableEurekaClient
-@SpringBootApplication
+//@EnableCircuitBreaker 服务熔断
+//@EnableEurekaClient
+//@SpringBootApplication
+/*
+ * 上面的三个注解,被包含在了 SpringCloudApplication注解中
+ * */
+@SpringCloudApplication
 public class ConsumerApplication {
     //注册一个restTemplate
     @Bean

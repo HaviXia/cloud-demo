@@ -2,9 +2,9 @@ package cn.itcast.consumer.web;
 
 import cn.itcast.consumer.pojo.User;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("consumer")
+@DefaultProperties(defaultFallback = "queryByIdFallBack")
 public class ConsumerController {
 
     @Autowired
@@ -36,7 +37,10 @@ public class ConsumerController {
      * 掉用的另外的一个 tomcat 也就是 user-service 对应的 tomcat
      * */
     @GetMapping("{id}")
-    public User queryById(@PathVariable("id") Long id) {
+    // 开启线程隔离、服务容错注解
+    //@HystrixCommand(fallbackMethod = "queryByIdFallBack") //成功和失败的方法，两个方法的返回值、参数列表必须一致
+    @HystrixCommand
+    public String queryById(@PathVariable("id") Long id) {
         /*
          * eureka中已经注册了user-service，动态获取
          * 1 注入DiscoveryClient，使用discoveryClient获取实例
@@ -53,12 +57,15 @@ public class ConsumerController {
         /*
          * 使用 Ribbon 做负载均衡
          * 找到启动类,添加 LoadBalanced注解，添加到 restTemplate 身上，loadBalanced内置拦截器拦截 restTemplate请求
-         *
          * */
         //ServiceInstance choose = ribbonLoadBalancerClient.choose("user-service"); //得到一个实例，默认轮询
 
         String url = "http://user-service/user/" + id;
-        User user = restTemplatere.getForObject(url, User.class);
+        String user = restTemplatere.getForObject(url, String.class);
         return user;
+    }
+
+    public String queryByIdFallBack(@PathVariable("id") Long id) {
+        return "抱歉，服务器拥挤，请稍后再试！";
     }
 }
