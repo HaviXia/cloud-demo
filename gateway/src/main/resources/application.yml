@@ -4,9 +4,11 @@ server:
     client:
       service-url:
         defaultZone: http://127.0.0.1:10086/eureka
+spring:
+  application:
+    name: gateway
 zuul:
   routes:
-    hehe:
-      path: /user-service/**
-      serviceId: user-service
-
+    user-service: /user/**
+  ignored-services:
+    - consumer-service
