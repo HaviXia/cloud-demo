@@ -3,6 +3,7 @@ package cn.itcast;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 /*
  * 上面的三个注解,被包含在了 SpringCloudApplication注解中
  * */
+@EnableFeignClients
 @SpringCloudApplication
 public class ConsumerApplication {
     //注册一个restTemplate

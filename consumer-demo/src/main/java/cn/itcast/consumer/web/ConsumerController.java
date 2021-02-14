@@ -1,6 +1,8 @@
 package cn.itcast.consumer.web;
 
 
+import cn.itcast.consumer.client.UserClient;
+import cn.itcast.consumer.pojo.User;
 import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -23,9 +25,11 @@ import org.springframework.web.client.RestTemplate;
 @DefaultProperties(defaultFallback = "queryByIdFallBack")
 public class ConsumerController {
 
-    @Autowired
+    /*@Autowired
     private RestTemplate restTemplatere;
-
+    使用 Feign 做服务调用
+    */
+    private UserClient userClient;
     //动态获取eureka中服务
     @Autowired
     //private DiscoveryClient discoveryClient;
@@ -43,7 +47,7 @@ public class ConsumerController {
             @HystrixProperty(name = "circuitBreaker.sleepWiondowInMilliseconds", value = "10000"),//休眠时间窗次数
             @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "60") //错误百分比
     })
-    public String queryById(@PathVariable("id") Long id) {
+    public User queryById(@PathVariable("id") Long id) {
         /*
          * eureka中已经注册了user-service，动态获取
          * 1 注入DiscoveryClient，使用discoveryClient获取实例
@@ -63,12 +67,13 @@ public class ConsumerController {
          * */
         //ServiceInstance choose = ribbonLoadBalancerClient.choose("user-service"); //得到一个实例，默认轮询
 
-        if (id % 2 == 0) {
+        /*if (id % 2 == 0) {
             throw new RuntimeException("手动控制熔断");
         }
-        String url = "http://user-service/user/" + id;
-        String user = restTemplatere.getForObject(url, String.class);
-        return user;
+        String url = "http://user-service/user/" + id;*/
+        //String user = restTemplatere.getForObject(url, String.class);
+
+        return userClient.queryById(id);
     }
 
     public String queryByIdFallBack(@PathVariable("id") Long id) {
