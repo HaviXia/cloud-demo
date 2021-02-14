@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("consumer")
-@DefaultProperties(defaultFallback = "queryByIdFallBack")
+//@DefaultProperties(defaultFallback = "queryByIdFallBack")
 public class ConsumerController {
 
     /*@Autowired
@@ -76,11 +76,11 @@ public class ConsumerController {
         return userClient.queryById(id);
     }
 
-    public String queryByIdFallBack(@PathVariable("id") Long id) {
+ /*   public String queryByIdFallBack(@PathVariable("id") Long id) {
         return "抱歉，服务器拥挤，请稍后再试！";
     }
 
     public String defaultFallBack() {
         return "抱歉，服务器拥挤，请稍后再试！";
-    }
+    }*/
 }

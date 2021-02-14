@@ -11,6 +11,12 @@ eureka:
   instance:
     ip-address: 127.0.0.1
     prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ConnectionTimeout: 500
+  ReadTimeOut: 2000
 hystrix:
   command:
     default:

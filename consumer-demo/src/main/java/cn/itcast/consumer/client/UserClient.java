@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @date ：2021/2/15 01:20
  */
 
-@FeignClient("user-service")// 服务名,feign拿着服务名去拉取eureka中，根据Ribbon实现负载均衡，向user发起请求，传入id
+@FeignClient(value = "user-service", fallback = UserClientFallBack.class)
+// 服务名,feign拿着服务名去拉取eureka中，根据Ribbon实现负载均衡，向user发起请求，传入id
 public interface UserClient {
     @GetMapping("user/{id}")
     User queryById(@PathVariable("id") Long id);
